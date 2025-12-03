@@ -19,4 +19,5 @@ def Save_CSV(df: pd.DataFrame, path: str):
 if __name__=='__main__':
     df = pd.read_csv("Data/RawDataSet.csv")
     df = clean_DataFrame(df)
+    df = Save_CSV(df,"Data/CleanData.csv")
     print(df)

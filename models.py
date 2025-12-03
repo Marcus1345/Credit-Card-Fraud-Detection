@@ -1,18 +1,23 @@
-import joblib
-from sklearn.ensemble import RandomForestClassifier
-from typing import Any
 
-def build_model(n_estimators: int = 200, max_depth: int = 10, random_state: int = 42) -> RandomForestClassifier:
-    model = RandomForestClassifier(
-        n_estimators = n_estimators,
-        max_depth=max_depth,
-        class_weight='balanced',
-        n_jobs=-1
+import joblib
+import lightgbm as lgb
+
+def build_model():
+    model = lgb.LGBMClassifier(
+        n_estimators=600,
+        learning_rate=0.03,
+        max_depth=-1,
+        num_leaves=32,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        class_weight="balanced",
+        n_jobs=-1,
+        random_state=42
     )
     return model
 
-def save_model(model: Any, path: str):
+def save_model(model, path):
     joblib.dump(model, path)
 
-def load_model(path: str):
+def load_model(path):
     return joblib.load(path)

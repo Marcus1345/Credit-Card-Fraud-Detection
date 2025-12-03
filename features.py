@@ -17,7 +17,7 @@ def make_features(df: pd.DataFrame, scaler: StandardScaler = None) -> Tuple[pd.D
     return x, y, scaler
 
 if __name__=='__main__':
-    df = pd.read_csv('Data/RawDataSet.csv')
+    df = pd.read_csv('Data/CleanData.csv')
     x, y, scaler = make_features(df)
     print(x.head())
     os.makedirs("models", exist_ok=True)

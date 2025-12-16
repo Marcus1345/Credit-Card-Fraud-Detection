@@ -33,7 +33,6 @@ def safe_float(x):
 
 # ========================= PREDICT =============================
 def predict_gui():
-   ං
     row = {}
     for col, entry in entries.items():
         row[col] = safe_float(entry.get())

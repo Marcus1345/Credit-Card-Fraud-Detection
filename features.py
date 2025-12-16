@@ -1,25 +1,38 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from typing import Tuple
-import os
-import joblib
 
-def make_features(df: pd.DataFrame, scaler: StandardScaler = None) -> Tuple[pd.DataFrame, pd.Series, StandardScaler]:
+NUM_COLS = [
+    "amt",
+    "city_pop",
+    "distance",
+    "lat",
+    "long",
+    "merch_lat",
+    "merch_long",
+    "unix_time"
+]
+
+DROP_COLS = ["cc_num"]   
+
+TARGET_COL = "is_fraud"
+
+
+def make_features(
+    df: pd.DataFrame,
+    scaler: StandardScaler = None
+) -> Tuple[pd.DataFrame, pd.Series, StandardScaler]:
+
     df = df.copy()
-    y = df["Class"]
-    x = df.drop(columns=["Class"])
+
+    y = df[TARGET_COL]
+
+    x = df.drop(columns=[TARGET_COL] + DROP_COLS, errors="ignore")
 
     if scaler is None:
         scaler = StandardScaler()
-        x[['Time','Amount']] = scaler.fit_transform(x[['Time','Amount']])
+        x[NUM_COLS] = scaler.fit_transform(x[NUM_COLS])
     else:
-        x[['Time','Amount']] = scaler.transform(x[['Time','Amount']])
-    return x, y, scaler
+        x[NUM_COLS] = scaler.transform(x[NUM_COLS])
 
-if __name__=='__main__':
-    df = pd.read_csv('Data/CleanData.csv')
-    x, y, scaler = make_features(df)
-    print(x.head())
-    os.makedirs("models", exist_ok=True)
-    joblib.dump(scaler,"models/scaler.joblib")
-    
+    return x, y, scaler

@@ -21,6 +21,10 @@ def run_model(csv_path, model_out, scaler_out, thr_out):
     print(" Making features...")
     X, y, scaler = make_features(df)
 
+    joblib.dump(X.columns.tolist(), "models/features.joblib")
+    print("TRAIN FEATURES:", X.columns.tolist())
+
+
     print(" Saving scaler...")
     joblib.dump(scaler, scaler_out)
 
@@ -69,7 +73,7 @@ def run_model(csv_path, model_out, scaler_out, thr_out):
 if __name__ == "__main__":
     os.makedirs("models", exist_ok=True)
     run_model(
-        csv_path="Data/CleanData.csv",
+        csv_path="Credit-Card-Fraud-Detection/Data/dataset_processed.csv",
         model_out="models/fraud_model.joblib",
         scaler_out="models/scaler.joblib",
         thr_out="models/best_threshold.txt"

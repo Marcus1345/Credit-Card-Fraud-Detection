@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Credit Card Fraud Detection Dashboard - AI-powered fraud prediction with LightGBM">
+    <title>Fraud Detection Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="app-header__logo">
+            <div class="app-header__icon">&#x1f6e1;&#xfe0f;</div>
+            <div>
+                <h1 class="app-header__title">Fraud Detection Dashboard</h1>
+                <p class="app-header__subtitle">Credit Card Fraud Detection &mdash; LightGBM</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <nav class="tab-nav" id="tab-nav">
+        <button class="tab-btn active" data-tab="predict" id="btn-tab-predict">
+            <span class="tab-btn__icon">&#x1f50d;</span> Du doan
+        </button>
+        <button class="tab-btn" data-tab="evaluation" id="btn-tab-evaluation">
+            <span class="tab-btn__icon">&#x1f4ca;</span> Danh gia
+        </button>
+        <button class="tab-btn" data-tab="info" id="btn-tab-info">
+            <span class="tab-btn__icon">&#x1f4cb;</span> Model Info
+        </button>
+    </nav>
+
+    <!-- TAB 1: PREDICT -->
+    <section class="tab-panel active" id="tab-predict">
+        <div class="predict-layout">
+            <!-- Left: Form -->
+            <div class="glass-card">
+                <div class="card-title">
+                    <div class="card-title__icon card-title__icon--primary">&#x1f4dd;</div>
+                    Nhap thong tin giao dich
+                </div>
+
+                <div class="feature-grid" id="feature-form">
+                    <div class="form-group">
+                        <label class="form-label" for="feat-amt">Amount ($)</label>
+                        <input class="form-input" type="number" step="any" id="feat-amt" placeholder="100.00">
+                        <div class="form-hint">Transaction amount in USD</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-city_pop">City Population</label>
+                        <input class="form-input" type="number" step="any" id="feat-city_pop" placeholder="50000">
+                        <div class="form-hint">Population of the city</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-lat">Latitude</label>
+                        <input class="form-input" type="number" step="any" id="feat-lat" placeholder="40.0">
+                        <div class="form-hint">Cardholder latitude</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-long">Longitude</label>
+                        <input class="form-input" type="number" step="any" id="feat-long" placeholder="-100.0">
+                        <div class="form-hint">Cardholder longitude</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-merch_lat">Merchant Lat</label>
+                        <input class="form-input" type="number" step="any" id="feat-merch_lat" placeholder="40.0">
+                        <div class="form-hint">Merchant latitude</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-merch_long">Merchant Long</label>
+                        <input class="form-input" type="number" step="any" id="feat-merch_long" placeholder="-100.0">
+                        <div class="form-hint">Merchant longitude</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-unix_time">Unix Time</label>
+                        <input class="form-input" type="number" step="any" id="feat-unix_time" placeholder="1371816893">
+                        <div class="form-hint">Unix timestamp</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-distance">Distance</label>
+                        <input class="form-input" type="number" step="any" id="feat-distance" placeholder="25.0">
+                        <div class="form-hint">Distance cardholder - merchant</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-merchant">Merchant ID</label>
+                        <input class="form-input" type="number" step="any" id="feat-merchant" placeholder="50">
+                        <div class="form-hint">Encoded merchant identifier</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-category">Category</label>
+                        <input class="form-input" type="number" step="any" id="feat-category" placeholder="3">
+                        <div class="form-hint">Transaction category (encoded)</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-hour">Hour</label>
+                        <input class="form-input" type="number" step="any" id="feat-hour" placeholder="14">
+                        <div class="form-hint">Hour of day (0-23)</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-day">Day</label>
+                        <input class="form-input" type="number" step="any" id="feat-day" placeholder="15">
+                        <div class="form-hint">Day of month (1-31)</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-month">Month</label>
+                        <input class="form-input" type="number" step="any" id="feat-month" placeholder="6">
+                        <div class="form-hint">Month (1-12)</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="feat-gender">Gender</label>
+                        <input class="form-input" type="number" step="any" id="feat-gender" placeholder="0">
+                        <div class="form-hint">0 = Female, 1 = Male</div>
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-lg" id="btn-predict" onclick="runPredict()">
+                        Du doan giao dich
+                    </button>
+                </div>
+                <div class="btn-group mt-4">
+                    <button class="btn btn-danger btn-sm" onclick="loadSample('fraud')">
+                        Tao Fraud Sample
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="loadSample('normal')">
+                        Tao Normal Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Result -->
+            <div>
+                <div class="glass-card hidden" id="gauge-section">
+                    <div class="card-title">
+                        <div class="card-title__icon card-title__icon--warning">&#x1f3af;</div>
+                        Fraud Probability
+                    </div>
+                    <div class="gauge-container">
+                        <canvas id="gauge-canvas" width="340" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div id="predict-result" class="hidden"></div>
+
+                <div class="glass-card mt-6">
+                    <div class="card-title">
+                        <div class="card-title__icon card-title__icon--cyan">&#x1f4a1;</div>
+                        Huong dan
+                    </div>
+                    <ul class="info-list">
+                        <li>
+                            <span class="info-list__key">Buoc 1</span>
+                            <span class="info-list__val">Nhap thong tin hoac tao sample</span>
+                        </li>
+                        <li>
+                            <span class="info-list__key">Buoc 2</span>
+                            <span class="info-list__val">Nhan "Du doan giao dich"</span>
+                        </li>
+                        <li>
+                            <span class="info-list__key">Buoc 3</span>
+                            <span class="info-list__val">Xem ket qua va xac suat fraud</span>
+                        </li>
+                    </ul>
+                    <hr class="section-divider">
+                    <p style="font-size:12px; color:var(--text-muted);">
+                        <strong>Tip:</strong> Su dung nut "Tao Fraud/Normal Sample" de tao du lieu mau nhanh.
+                        Giao dich fraud thuong co: so tien lon, khoang cach xa, gio bat thuong (0-5h sang).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 2: EVALUATION -->
+    <section class="tab-panel" id="tab-evaluation">
+        <div class="grid-4 mb-6" id="eval-stats">
+            <div class="stat-card">
+                <div class="stat-card__value">--</div>
+                <div class="stat-card__label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__value">--</div>
+                <div class="stat-card__label">Precision</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__value">--</div>
+                <div class="stat-card__label">Recall</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__value">--</div>
+                <div class="stat-card__label">F1-Score</div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="glass-card">
+                <div class="card-title">
+                    <div class="card-title__icon card-title__icon--danger">&#x1f522;</div>
+                    Confusion Matrix
+                </div>
+                <div id="confusion-matrix">
+                    <div class="empty-state">
+                        <div class="empty-state__icon">&#x1f4ca;</div>
+                        <div class="empty-state__text">Dang tai du lieu...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-title">
+                    <div class="card-title__icon card-title__icon--success">&#x1f4cb;</div>
+                    Classification Report
+                </div>
+                <div id="class-report">
+                    <div class="empty-state">
+                        <div class="empty-state__icon">&#x1f4ca;</div>
+                        <div class="empty-state__text">Dang tai du lieu...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2 mt-6">
+            <div class="glass-card">
+                <div class="card-title">
+                    <div class="card-title__icon card-title__icon--primary">&#x1f4c8;</div>
+                    ROC Curve
+                </div>
+                <div class="chart-container">
+                    <canvas id="roc-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-title">
+                    <div class="card-title__icon card-title__icon--warning">&#x1f3c6;</div>
+                    Feature Importance
+                </div>
+                <div class="chart-container">
+                    <canvas id="feature-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: MODEL INFO -->
+    <section class="tab-panel" id="tab-info">
+        <div id="model-info-content">
+            <div class="empty-state">
+                <div class="empty-state__icon">&#x23f3;</div>
+                <div class="empty-state__text">Dang tai thong tin model...</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

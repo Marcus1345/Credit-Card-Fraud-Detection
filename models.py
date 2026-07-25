@@ -11,24 +11,24 @@ def build_model():
         n_estimators=800,
         learning_rate=0.03,
 
-        # tree control (chống overfit)
-        num_leaves=64,
+        # tree control - giảm complexity chống overfit
+        num_leaves=48,
         max_depth=-1,
         min_child_samples=50,
-        subsample=0.8,
-        colsample_bytree=0.8,
+        subsample=0.7,
+        colsample_bytree=0.7,
 
-        # fraud handling
-        class_weight={0: 1, 1: 4},  # ưu tiên fraud
-        is_unbalance=False,         # vì đã dùng SMOTE
+        # Không dùng class_weight vì đã SMOTE - tránh double-dipping
+        # class_weight đã bỏ, is_unbalance=False
 
-        # regularization
+        # regularization - tăng mạnh chống overfit
         reg_alpha=0.5,
-        reg_lambda=0.5,
+        reg_lambda=0.8,
 
         # speed + stability
         random_state=42,
-        n_jobs=-1
+        n_jobs=-1,
+        verbose=-1,
     )
 
     return model

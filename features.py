@@ -13,7 +13,8 @@ NUM_COLS = [
     "unix_time"
 ]
 
-DROP_COLS = ["cc_num"]   
+# Columns to drop if still present (identifiers, not features)
+DROP_COLS = ["cc_num"]
 
 TARGET_COL = "is_fraud"
 

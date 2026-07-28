@@ -12,10 +12,9 @@
 
 <div class="app-container">
 
-    <!-- HEADER -->
     <header class="app-header">
         <div class="app-header__logo">
-            <div class="app-header__icon">&#x1f6e1;&#xfe0f;</div>
+            <div class="app-header__icon"></div>
             <div>
                 <h1 class="app-header__title">Fraud Detection Dashboard</h1>
                 <p class="app-header__subtitle">Credit Card Fraud Detection &mdash; LightGBM</p>
@@ -23,26 +22,23 @@
         </div>
     </header>
 
-    <!-- TAB NAVIGATION -->
     <nav class="tab-nav" id="tab-nav">
         <button class="tab-btn active" data-tab="predict" id="btn-tab-predict">
-            <span class="tab-btn__icon">&#x1f50d;</span> Du doan
+            Du doan
         </button>
         <button class="tab-btn" data-tab="evaluation" id="btn-tab-evaluation">
-            <span class="tab-btn__icon">&#x1f4ca;</span> Danh gia
+            Danh gia
         </button>
         <button class="tab-btn" data-tab="info" id="btn-tab-info">
-            <span class="tab-btn__icon">&#x1f4cb;</span> Model Info
+            Model Info
         </button>
     </nav>
 
-    <!-- TAB 1: PREDICT -->
     <section class="tab-panel active" id="tab-predict">
         <div class="predict-layout">
-            <!-- Left: Form -->
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--primary">&#x1f4dd;</div>
+                    <div class="card-title__icon card-title__icon--primary"></div>
                     Nhap thong tin giao dich
                 </div>
 
@@ -136,11 +132,10 @@
                 </div>
             </div>
 
-            <!-- Right: Result -->
             <div>
                 <div class="glass-card hidden" id="gauge-section">
                     <div class="card-title">
-                        <div class="card-title__icon card-title__icon--warning">&#x1f3af;</div>
+                        <div class="card-title__icon card-title__icon--warning"></div>
                         Fraud Probability
                     </div>
                     <div class="gauge-container">
@@ -152,7 +147,7 @@
 
                 <div class="glass-card mt-6">
                     <div class="card-title">
-                        <div class="card-title__icon card-title__icon--cyan">&#x1f4a1;</div>
+                        <div class="card-title__icon card-title__icon--cyan"></div>
                         Huong dan
                     </div>
                     <ul class="info-list">
@@ -179,7 +174,6 @@
         </div>
     </section>
 
-    <!-- TAB 2: EVALUATION -->
     <section class="tab-panel" id="tab-evaluation">
         <div class="grid-4 mb-6" id="eval-stats">
             <div class="stat-card">
@@ -203,12 +197,12 @@
         <div class="grid-2">
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--danger">&#x1f522;</div>
+                    <div class="card-title__icon card-title__icon--danger"></div>
                     Confusion Matrix
                 </div>
                 <div id="confusion-matrix">
                     <div class="empty-state">
-                        <div class="empty-state__icon">&#x1f4ca;</div>
+                        <div class="empty-state__icon"></div>
                         <div class="empty-state__text">Dang tai du lieu...</div>
                     </div>
                 </div>
@@ -216,12 +210,12 @@
 
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--success">&#x1f4cb;</div>
+                    <div class="card-title__icon card-title__icon--success"></div>
                     Classification Report
                 </div>
                 <div id="class-report">
                     <div class="empty-state">
-                        <div class="empty-state__icon">&#x1f4ca;</div>
+                        <div class="empty-state__icon"></div>
                         <div class="empty-state__text">Dang tai du lieu...</div>
                     </div>
                 </div>
@@ -231,7 +225,7 @@
         <div class="grid-2 mt-6">
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--primary">&#x1f4c8;</div>
+                    <div class="card-title__icon card-title__icon--primary"></div>
                     ROC Curve
                 </div>
                 <div class="chart-container">
@@ -241,7 +235,7 @@
 
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--warning">&#x1f3c6;</div>
+                    <div class="card-title__icon card-title__icon--warning"></div>
                     Feature Importance
                 </div>
                 <div class="chart-container">
@@ -251,11 +245,10 @@
         </div>
     </section>
 
-    <!-- TAB 3: MODEL INFO -->
     <section class="tab-panel" id="tab-info">
         <div id="model-info-content">
             <div class="empty-state">
-                <div class="empty-state__icon">&#x23f3;</div>
+                <div class="empty-state__icon"></div>
                 <div class="empty-state__text">Dang tai thong tin model...</div>
             </div>
         </div>

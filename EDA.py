@@ -1,29 +1,13 @@
-"""
-EDA.py - Exploratory Data Analysis & Data Preprocessing
-========================================================
-- Load raw data
-- Handle null / NA / missing values
-- Remove duplicate rows
-- Drop unused columns (cc_num)
-- Standardize & validate data
-- Save cleaned dataset for model training
-- Print comprehensive statistics
-"""
-
 import pandas as pd
 import numpy as np
 import os
 
-# ── Config ─────────────────────────────────────────────────────
 RAW_DATA_PATH = "Data/CleanData.csv"
 PROCESSED_DATA_PATH = "Data/dataset_processed.csv"
 
 TARGET_COL = "is_fraud"
-
-# Columns to drop (identifiers, not useful for prediction)
 DROP_COLS = ["cc_num"]
 
-# ── 1. Load Data ──────────────────────────────────────────────
 print("=" * 60)
 print("  EXPLORATORY DATA ANALYSIS & PREPROCESSING")
 print("=" * 60)
@@ -38,19 +22,16 @@ else:
 print(f"    Shape: {df.shape[0]:,} rows x {df.shape[1]} columns")
 print(f"    Columns: {df.columns.tolist()}")
 
-# ── 2. Basic Info ─────────────────────────────────────────────
 print(f"\n{'='*60}")
 print("  [2] DATA TYPES")
 print(f"{'='*60}")
 print(df.dtypes.to_string())
 
-# ── 3. Descriptive Statistics ─────────────────────────────────
 print(f"\n{'='*60}")
 print("  [3] DESCRIPTIVE STATISTICS")
 print(f"{'='*60}")
 print(df.describe().to_string())
 
-# ── 4. Handle Missing Values (null / NA / NaN) ───────────────
 print(f"\n{'='*60}")
 print("  [4] MISSING VALUES CHECK")
 print(f"{'='*60}")
@@ -65,7 +46,6 @@ if na_total > 0:
         pct = count / len(df) * 100
         print(f"      - {col}: {count:,} ({pct:.2f}%)")
 
-    # Drop rows with missing values
     before = len(df)
     df = df.dropna()
     after = len(df)
@@ -74,7 +54,6 @@ if na_total > 0:
 else:
     print("    No missing values found!")
 
-# ── 5. Remove Duplicates ─────────────────────────────────────
 print(f"\n{'='*60}")
 print("  [5] DUPLICATE CHECK")
 print(f"{'='*60}")
@@ -90,7 +69,6 @@ if dup_count > 0:
 else:
     print("    No duplicate rows found!")
 
-# ── 6. Drop Unused Columns ───────────────────────────────────
 print(f"\n{'='*60}")
 print("  [6] DROP UNUSED COLUMNS")
 print(f"{'='*60}")
@@ -103,7 +81,6 @@ if cols_to_drop:
 else:
     print("    No unused columns to drop")
 
-# ── 7. Validate Target Column ────────────────────────────────
 print(f"\n{'='*60}")
 print("  [7] TARGET VARIABLE ANALYSIS")
 print(f"{'='*60}")
@@ -120,7 +97,6 @@ else:
     print(f"    WARNING: Target column '{TARGET_COL}' not found!")
     print(f"    Available columns: {df.columns.tolist()}")
 
-# ── 8. Feature Correlations with Target ──────────────────────
 print(f"\n{'='*60}")
 print("  [8] FEATURE CORRELATION WITH FRAUD")
 print(f"{'='*60}")
@@ -135,7 +111,6 @@ if TARGET_COL in df.columns:
             bar = "#" * int(corr * 50)
             print(f"    |  {feat:<15} |  {corr:.6f}       | {bar}")
 
-# ── 9. Outlier Summary ───────────────────────────────────────
 print(f"\n{'='*60}")
 print("  [9] OUTLIER SUMMARY (IQR method)")
 print(f"{'='*60}")
@@ -155,7 +130,6 @@ for col in numeric_cols:
         pct = outliers / len(df) * 100
         print(f"    {col:<15}: {outliers:>7,} outliers ({pct:.2f}%)")
 
-# ── 10. Save Processed Dataset ───────────────────────────────
 print(f"\n{'='*60}")
 print("  [10] SAVE PROCESSED DATASET")
 print(f"{'='*60}")
@@ -165,7 +139,6 @@ print(f"    Saved to: {PROCESSED_DATA_PATH}")
 print(f"    Final shape: {df.shape[0]:,} rows x {df.shape[1]} columns")
 print(f"    Final columns: {df.columns.tolist()}")
 
-# ── Summary ──────────────────────────────────────────────────
 print(f"\n{'='*60}")
 print("  PREPROCESSING COMPLETE")
 print(f"{'='*60}")

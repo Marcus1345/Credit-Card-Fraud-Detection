@@ -1,13 +1,6 @@
-/* ============================================================
-   Credit Card Fraud Detection Dashboard — Design System
-   Dark mode, glassmorphism, premium aesthetics
-   ============================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ── CSS Custom Properties ─────────────────────────────────── */
 :root {
-    /* Core palette */
     --bg-primary: #0a0e1a;
     --bg-secondary: #111827;
     --bg-card: rgba(17, 24, 39, 0.7);
@@ -15,7 +8,6 @@
     --bg-glass: rgba(255, 255, 255, 0.04);
     --bg-glass-hover: rgba(255, 255, 255, 0.08);
 
-    /* Accent gradients */
     --accent-primary: #6366f1;
     --accent-secondary: #8b5cf6;
     --accent-cyan: #06b6d4;
@@ -29,17 +21,14 @@
     --gradient-warning: linear-gradient(135deg, #f59e0b, #f97316);
     --gradient-hero: linear-gradient(135deg, #0a0e1a 0%, #1e1b4b 50%, #0a0e1a 100%);
 
-    /* Text */
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
     --text-accent: #a5b4fc;
 
-    /* Borders */
     --border-subtle: rgba(255, 255, 255, 0.06);
     --border-accent: rgba(99, 102, 241, 0.3);
 
-    /* Shadows */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
@@ -47,20 +36,17 @@
     --shadow-glow-success: 0 0 30px rgba(16, 185, 129, 0.15);
     --shadow-glow-danger: 0 0 30px rgba(244, 63, 94, 0.15);
 
-    /* Spacing & Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     --radius-full: 9999px;
 
-    /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-base: 0.25s ease;
     --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Reset & Base ──────────────────────────────────────────── */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -81,7 +67,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Background animated gradient */
 body::before {
     content: '';
     position: fixed;
@@ -97,7 +82,6 @@ body::before {
     z-index: 0;
 }
 
-/* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -113,7 +97,6 @@ body::before {
     background: rgba(99, 102, 241, 0.5);
 }
 
-/* ── Layout ────────────────────────────────────────────────── */
 .app-container {
     position: relative;
     z-index: 1;
@@ -122,7 +105,6 @@ body::before {
     padding: 24px;
 }
 
-/* ── Header ────────────────────────────────────────────────── */
 .app-header {
     text-align: center;
     padding: 40px 20px 32px;
@@ -171,7 +153,6 @@ body::before {
     margin-top: 4px;
 }
 
-/* ── Tab Navigation ────────────────────────────────────────── */
 .tab-nav {
     display: flex;
     gap: 4px;
@@ -240,7 +221,6 @@ body::before {
     }
 }
 
-/* ── Glass Card ────────────────────────────────────────────── */
 .glass-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -292,7 +272,6 @@ body::before {
 .card-title__icon--warning { background: rgba(245, 158, 11, 0.15); }
 .card-title__icon--cyan { background: rgba(6, 182, 212, 0.15); }
 
-/* ── Grid Layouts ──────────────────────────────────────────── */
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -311,7 +290,6 @@ body::before {
     gap: 16px;
 }
 
-/* ── Form Elements ─────────────────────────────────────────── */
 .form-group {
     margin-bottom: 16px;
 }
@@ -355,7 +333,6 @@ body::before {
     margin-top: 4px;
 }
 
-/* ── Slider (Range Input) ──────────────────────────────────── */
 .slider-group {
     margin-bottom: 20px;
 }
@@ -420,7 +397,6 @@ body::before {
     border: none;
 }
 
-/* ── Buttons ───────────────────────────────────────────────── */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -550,7 +526,6 @@ body::before {
     flex-wrap: wrap;
 }
 
-/* ── Stat Cards ────────────────────────────────────────────── */
 .stat-card {
     background: var(--bg-glass);
     border: 1px solid var(--border-subtle);
@@ -603,7 +578,6 @@ body::before {
     font-weight: 500;
 }
 
-/* ── Gauge (Probability) ──────────────────────────────────── */
 .gauge-container {
     display: flex;
     flex-direction: column;
@@ -649,7 +623,6 @@ body::before {
     letter-spacing: 1.5px;
 }
 
-/* ── Result Banner ─────────────────────────────────────────── */
 .result-banner {
     border-radius: var(--radius-md);
     padding: 20px 24px;
@@ -701,7 +674,6 @@ body::before {
     color: var(--text-secondary);
 }
 
-/* ── Table ─────────────────────────────────────────────────── */
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -735,7 +707,6 @@ body::before {
     font-weight: 600;
 }
 
-/* ── Badge ─────────────────────────────────────────────────── */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -767,7 +738,6 @@ body::before {
     color: var(--accent-amber);
 }
 
-/* ── Progress Bar ──────────────────────────────────────────── */
 .progress-container {
     margin: 20px 0;
 }
@@ -817,7 +787,6 @@ body::before {
     margin-top: 8px;
 }
 
-/* ── Log Console ───────────────────────────────────────────── */
 .log-console {
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border-subtle);
@@ -841,7 +810,6 @@ body::before {
 .log-console .log-line--error { color: var(--accent-rose); }
 .log-console .log-line--warning { color: var(--accent-amber); }
 
-/* ── Chart Container ───────────────────────────────────────── */
 .chart-container {
     position: relative;
     width: 100%;
@@ -852,7 +820,6 @@ body::before {
     max-height: 350px;
 }
 
-/* ── Comparison Table ──────────────────────────────────────── */
 .compare-row {
     display: flex;
     align-items: center;
@@ -888,7 +855,6 @@ body::before {
     font-size: 14px;
 }
 
-/* ── Section Divider ───────────────────────────────────────── */
 .section-divider {
     border: none;
     height: 1px;
@@ -896,14 +862,12 @@ body::before {
     margin: 28px 0;
 }
 
-/* ── Param Grid (Model Tuning) ─────────────────────────────── */
 .param-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
-/* ── Loading Spinner ───────────────────────────────────────── */
 .spinner {
     width: 20px;
     height: 20px;
@@ -918,7 +882,6 @@ body::before {
     to { transform: rotate(360deg); }
 }
 
-/* ── Toast / Notification ──────────────────────────────────── */
 .toast-container {
     position: fixed;
     top: 24px;
@@ -971,7 +934,6 @@ body::before {
     to { opacity: 0; transform: translateX(30px); }
 }
 
-/* ── Confusion Matrix Heatmap ──────────────────────────────── */
 .confusion-matrix {
     display: grid;
     grid-template-columns: auto 1fr 1fr;
@@ -1017,7 +979,6 @@ body::before {
     opacity: 0.7;
 }
 
-/* ── History Row ───────────────────────────────────────────── */
 .history-row {
     display: flex;
     align-items: center;
@@ -1081,7 +1042,6 @@ body::before {
     text-transform: uppercase;
 }
 
-/* ── Predict Tab Layout ────────────────────────────────────── */
 .predict-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1094,7 +1054,6 @@ body::before {
     gap: 12px;
 }
 
-/* ── Model Info Panel ──────────────────────────────────────── */
 .info-list {
     list-style: none;
 }
@@ -1119,7 +1078,6 @@ body::before {
     font-weight: 600;
 }
 
-/* ── Empty State ───────────────────────────────────────────── */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -1136,7 +1094,6 @@ body::before {
     font-size: 14px;
 }
 
-/* ── Threshold Slider ──────────────────────────────────────── */
 .threshold-control {
     display: flex;
     align-items: center;
@@ -1159,7 +1116,6 @@ body::before {
     flex: 1;
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 1024px) {
     .grid-2, .predict-layout, .param-grid {
         grid-template-columns: 1fr;
@@ -1195,7 +1151,6 @@ body::before {
     }
 }
 
-/* ── Utilities ─────────────────────────────────────────────── */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .mt-4 { margin-top: 16px; }

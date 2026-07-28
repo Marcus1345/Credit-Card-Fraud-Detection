@@ -1,9 +1,3 @@
-/* ============================================================
-   Credit Card Fraud Detection Dashboard -- Frontend Logic
-   Tab navigation, API calls, Chart.js rendering, Gauge
-   ============================================================ */
-
-// -- Feature definitions --
 const FEATURES = [
     { key: 'amt', label: 'Amount ($)', placeholder: '100.00' },
     { key: 'city_pop', label: 'City Population', placeholder: '50000' },
@@ -21,18 +15,15 @@ const FEATURES = [
     { key: 'gender', label: 'Gender', placeholder: '0' },
 ];
 
-// -- Chart instances --
 let rocChart = null;
 let featureChart = null;
 
-// -- DOM Ready --
 document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     loadModelInfo();
     loadEvaluation();
 });
 
-// -- Tab Navigation --
 function initTabs() {
     const btns = document.querySelectorAll('.tab-btn');
     btns.forEach(btn => {
@@ -46,7 +37,6 @@ function initTabs() {
     });
 }
 
-// -- Toast Notifications --
 function showToast(message, type = 'info') {
     let container = document.getElementById('toast-container');
     if (!container) {
@@ -67,10 +57,6 @@ function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
-
-// ═══════════════════════════════════════════════════════════
-//  PREDICT
-// ═══════════════════════════════════════════════════════════
 
 async function loadSample(type) {
     try {
@@ -142,7 +128,7 @@ function displayPredictResult(proba, label, threshold) {
 
     resultDiv.innerHTML = `
         <div class="result-banner ${isFraud ? 'result-banner--fraud' : 'result-banner--safe'}">
-            <div class="result-banner__icon">${isFraud ? '&#x26a0;&#xfe0f;' : '&#x2705;'}</div>
+            <div class="result-banner__icon">${isFraud ? 'WARNING' : 'OK'}</div>
             <div>
                 <div class="result-banner__title">
                     ${isFraud ? 'CANH BAO: Giao dich co kha nang GIAN LAN!' : 'Giao dich binh thuong'}
@@ -156,7 +142,6 @@ function displayPredictResult(proba, label, threshold) {
     resultDiv.classList.remove('hidden');
 }
 
-// -- Gauge Drawing --
 function drawGauge(value) {
     const canvas = document.getElementById('gauge-canvas');
     if (!canvas) return;
@@ -176,7 +161,6 @@ function drawGauge(value) {
 
     ctx.clearRect(0, 0, w, h);
 
-    // Background arc
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.strokeStyle = 'rgba(255,255,255,0.06)';
@@ -184,7 +168,6 @@ function drawGauge(value) {
     ctx.lineCap = 'round';
     ctx.stroke();
 
-    // Value arc with gradient
     const gradient = ctx.createLinearGradient(0, cy, w, cy);
     if (value < 0.3) {
         gradient.addColorStop(0, '#10b981');
@@ -204,7 +187,6 @@ function drawGauge(value) {
     ctx.lineCap = 'round';
     ctx.stroke();
 
-    // Glow effect
     ctx.shadowColor = value < 0.3 ? '#10b981' : value < 0.6 ? '#f59e0b' : '#f43f5e';
     ctx.shadowBlur = 15;
     ctx.beginPath();
@@ -214,18 +196,15 @@ function drawGauge(value) {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Value text
     ctx.fillStyle = '#f1f5f9';
     ctx.font = '700 36px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`${(value * 100).toFixed(1)}%`, cx, cy - 20);
 
-    // Label
     ctx.fillStyle = '#64748b';
     ctx.font = '500 11px Inter, sans-serif';
     ctx.fillText('FRAUD PROBABILITY', cx, cy + 5);
 
-    // Min / Max
     ctx.font = '400 10px Inter, sans-serif';
     ctx.fillStyle = '#64748b';
     ctx.textAlign = 'left';
@@ -233,10 +212,6 @@ function drawGauge(value) {
     ctx.textAlign = 'right';
     ctx.fillText('100%', cx + radius + 5, cy + 20);
 }
-
-// ═══════════════════════════════════════════════════════════
-//  MODEL INFO
-// ═══════════════════════════════════════════════════════════
 
 async function loadModelInfo() {
     try {
@@ -264,14 +239,14 @@ function renderModelInfo(info) {
         <div class="grid-2">
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--primary">&#x1f916;</div>
+                    <div class="card-title__icon card-title__icon--primary"></div>
                     Model Parameters
                 </div>
                 <ul class="info-list">${paramsList}</ul>
             </div>
             <div class="glass-card">
                 <div class="card-title">
-                    <div class="card-title__icon card-title__icon--cyan">&#x1f4cb;</div>
+                    <div class="card-title__icon card-title__icon--cyan"></div>
                     Model Details
                 </div>
                 <ul class="info-list">
@@ -290,7 +265,7 @@ function renderModelInfo(info) {
                 </ul>
                 <hr class="section-divider">
                 <div class="card-title" style="font-size:14px;">
-                    <div class="card-title__icon card-title__icon--warning">&#x1f4ca;</div>
+                    <div class="card-title__icon card-title__icon--warning"></div>
                     Features
                 </div>
                 <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
@@ -300,10 +275,6 @@ function renderModelInfo(info) {
         </div>
     `;
 }
-
-// ═══════════════════════════════════════════════════════════
-//  EVALUATION
-// ═══════════════════════════════════════════════════════════
 
 async function loadEvaluation() {
     try {

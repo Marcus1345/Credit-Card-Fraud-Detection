@@ -1,10 +1,4 @@
-"""
-Credit Card Fraud Detection -- Flask Web Dashboard
-API endpoints for prediction, model info, and evaluation.
-"""
-
 import os
-import time
 import numpy as np
 import pandas as pd
 import joblib
@@ -21,7 +15,6 @@ from sklearn.metrics import (
 from features import make_features, NUM_COLS
 from util_threshold import find_best_threshold
 
-# -- App Config --
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,14 +24,10 @@ SCALER_PATH = os.path.join(BASE_DIR, "models", "scaler.joblib")
 THRESHOLD_PATH = os.path.join(BASE_DIR, "models", "best_threshold.txt")
 FEATURES_PATH = os.path.join(BASE_DIR, "models", "features.joblib")
 
-# Cache for evaluation data
 _eval_cache = {}
 
 
-# ── Helpers ────────────────────────────────────────────────────
-
 def load_model_artifacts():
-    """Load model, scaler, threshold, features list."""
     model = joblib.load(MODEL_PATH)
     scaler = joblib.load(SCALER_PATH)
     threshold = _load_threshold()
@@ -54,7 +43,6 @@ def _load_threshold():
 
 
 def _predict_single(model, scaler, threshold, features, row_dict):
-    """Predict a single transaction."""
     df = pd.DataFrame([row_dict])
     missing = set(features) - set(df.columns)
     if missing:
@@ -67,7 +55,6 @@ def _predict_single(model, scaler, threshold, features, row_dict):
 
 
 def _evaluate_model(model, X_test, y_test, features):
-    """Evaluate model and return metrics dict."""
     y_proba = model.predict_proba(X_test)[:, 1]
     y_pred = model.predict(X_test)
 
@@ -77,12 +64,10 @@ def _evaluate_model(model, X_test, y_test, features):
     fpr, tpr, thresholds = roc_curve(y_test, y_proba)
     roc_auc = auc(fpr, tpr)
 
-    # Subsample ROC for JSON efficiency
     step = max(1, len(fpr) // 200)
     fpr_sub = fpr[::step].tolist()
     tpr_sub = tpr[::step].tolist()
 
-    # Feature importance
     fi = {}
     if hasattr(model, 'feature_importances_'):
         for fname, imp in zip(features, model.feature_importances_):
@@ -99,14 +84,11 @@ def _evaluate_model(model, X_test, y_test, features):
     }
 
 
-# ── Routes ─────────────────────────────────────────────────────
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
-# -- Predict --
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     try:
@@ -122,20 +104,16 @@ def api_predict():
         return jsonify({'error': str(e)}), 400
 
 
-# -- Sample Generation --
-# Cache for fraud/normal samples from dataset
 _sample_cache = {'fraud': None, 'normal': None}
 
 
 def _load_sample_pool():
-    """Load and cache fraud/normal samples from dataset."""
     global _sample_cache
     if _sample_cache['fraud'] is not None:
         return True
     try:
         df = pd.read_csv(DATA_PATH)
         features = joblib.load(FEATURES_PATH)
-        # Only keep feature columns that the model uses
         keep_cols = [c for c in features if c in df.columns]
         _sample_cache['fraud'] = df[df['is_fraud'] == 1][keep_cols]
         _sample_cache['normal'] = df[df['is_fraud'] == 0][keep_cols]
@@ -145,14 +123,6 @@ def _load_sample_pool():
 
 
 def _generate_fraud_fallback():
-    """Generate a fraud-like sample from real statistical distributions.
-    Used only when dataset cannot be loaded."""
-    # Based on actual dataset analysis:
-    # amt: mean=531, median=396, P10=12, P90=1025
-    # distance: mean=76, P10=36, P90=113 (max ~151, NOT 500-3000!)
-    # hour: median=22 (late night is dominant for fraud)
-    # category: mean=7.3, fraud skews toward higher categories
-    # city_pop: median=2623, heavy right-skew
     hour = int(np.random.choice(
         [np.random.randint(22, 24), np.random.randint(0, 4),
          np.random.randint(0, 24)],
@@ -160,14 +130,14 @@ def _generate_fraud_fallback():
     ))
     return {
         'amt': round(float(np.random.choice([
-            np.random.uniform(200, 800),    # bulk of fraud (median ~396)
-            np.random.uniform(800, 1200),   # high-value fraud
-            np.random.uniform(10, 200),     # some low-value fraud exists
+            np.random.uniform(200, 800),
+            np.random.uniform(800, 1200),
+            np.random.uniform(10, 200),
         ], p=[0.50, 0.30, 0.20])), 4),
         'city_pop': int(np.random.choice([
-            np.random.randint(100, 5000),     # small city (most fraud)
-            np.random.randint(5000, 100000),  # medium city
-            np.random.randint(100000, 500000),  # larger city
+            np.random.randint(100, 5000),
+            np.random.randint(5000, 100000),
+            np.random.randint(100000, 500000),
         ], p=[0.55, 0.30, 0.15])),
         'lat': round(float(np.random.uniform(31, 45)), 4),
         'long': round(float(np.random.uniform(-112, -74)), 4),
@@ -188,12 +158,11 @@ def _generate_fraud_fallback():
 
 
 def _generate_normal_fallback():
-    """Generate a normal-like sample from real statistical distributions."""
     return {
         'amt': round(float(np.random.choice([
-            np.random.uniform(1, 50),       # small purchases (most common)
-            np.random.uniform(50, 135),     # medium purchases
-            np.random.uniform(1, 20),       # very small
+            np.random.uniform(1, 50),
+            np.random.uniform(50, 135),
+            np.random.uniform(1, 20),
         ], p=[0.50, 0.35, 0.15])), 4),
         'city_pop': int(np.random.choice([
             np.random.randint(200, 5000),
@@ -217,11 +186,9 @@ def _generate_normal_fallback():
 
 @app.route('/api/sample/<sample_type>')
 def api_sample(sample_type):
-    """Generate sample transaction. Prefers real data, falls back to stats."""
     if sample_type not in ('fraud', 'normal'):
         return jsonify({'error': 'Invalid sample type'}), 400
 
-    # Try to pick a real sample from dataset
     if _load_sample_pool():
         pool = _sample_cache[sample_type]
         if pool is not None and len(pool) > 0:
@@ -231,7 +198,6 @@ def api_sample(sample_type):
                       for col, v in row.items()}
             return jsonify(sample)
 
-    # Fallback: generate from statistical distributions
     if sample_type == 'fraud':
         sample = _generate_fraud_fallback()
     else:
@@ -239,7 +205,6 @@ def api_sample(sample_type):
     return jsonify(sample)
 
 
-# -- Model Info --
 @app.route('/api/model/info')
 def api_model_info():
     try:
@@ -266,7 +231,6 @@ def api_model_info():
         return jsonify({'error': str(e)}), 500
 
 
-# -- Evaluate Model --
 @app.route('/api/model/evaluate')
 def api_evaluate():
     global _eval_cache
@@ -290,8 +254,6 @@ def api_evaluate():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-# ── Main ───────────────────────────────────────────────────────
 
 if __name__ == '__main__':
     os.makedirs(os.path.join(BASE_DIR, 'models'), exist_ok=True)
